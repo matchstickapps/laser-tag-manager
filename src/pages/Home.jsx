@@ -114,7 +114,7 @@ export const Home = () => {
         {/* Footer */}
         <div className="mt-12 text-center text-white opacity-75">
           <p className="text-sm">
-            Built with React + Vite • OCR powered by Google Cloud Vision API
+            Built by matchstickapps
           </p>
         </div>
       </div>
