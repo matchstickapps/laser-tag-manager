@@ -8,6 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { GameProvider } from './contexts/GameContext';
 import { PlayerProvider } from './contexts/PlayerContext';
 import { PendingProvider } from './contexts/PendingContext';
+import { MigrationPrompt } from './components/MigrationPrompt';
 
 import { Home } from './pages/Home';
 import { PlayerUpload } from './pages/PlayerUpload';
@@ -35,6 +36,7 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/presentation" element={<Presentation />} />
             </Routes>
+            <MigrationPrompt />
           </PendingProvider>
         </PlayerProvider>
       </GameProvider>

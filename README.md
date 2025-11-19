@@ -8,7 +8,7 @@ A React-based web application for managing laser tag game statistics through QR 
 - **Google Cloud Vision OCR**: Fast, accurate text extraction from gun LCD displays (1-2 seconds!)
 - **Real-time Dashboard**: Manager interface for approving stats and monitoring games
 - **Presentation Mode**: Full-screen display optimized for TV/projector showing leaderboards and team stats
-- **LocalStorage Persistence**: All data stored locally in the browser
+- **Cloud Storage with Supabase**: Reliable cloud-based data persistence with multi-device sync (optional localStorage fallback)
 - **Responsive Design**: Works on desktop, tablet, and mobile devices
 
 ## Tech Stack
@@ -18,9 +18,10 @@ A React-based web application for managing laser tag game statistics through QR 
 - **React Router** - Client-side routing
 - **Tailwind CSS** - Styling
 - **Google Cloud Vision API** - High-accuracy OCR for reading gun displays
+- **Supabase** - PostgreSQL database for cloud storage and sync
 - **html5-qrcode** - QR code scanning
 - **Axios** - HTTP client for API calls
-- **LocalStorage** - Data persistence
+- **LocalStorage** - Fallback data persistence
 
 ## Setup Instructions
 
@@ -30,6 +31,7 @@ A React-based web application for managing laser tag game statistics through QR 
 - A webcam or camera-enabled device
 - Modern web browser (Chrome, Firefox, Safari, or Edge)
 - **Google Cloud Platform account with Vision API enabled**
+- **Supabase account** (free tier available) - See [SUPABASE_SETUP.md](./SUPABASE_SETUP.md)
 
 ### Google Cloud Vision API Setup
 
@@ -82,14 +84,16 @@ A React-based web application for managing laser tag game statistics through QR 
    npm install
    ```
 
-3. **Configure API Key** (see above)
+3. **Configure API Keys**:
+   - Google Cloud Vision API key (see above)
+   - **Supabase credentials** - Follow the [Supabase Setup Guide](./SUPABASE_SETUP.md)
 
 4. **Start the development server**:
    ```bash
    npm run dev
    ```
 
-5. **Open your browser** to the URL shown (typically `http://localhost:3000`)
+5. **Open your browser** to the URL shown (typically `http://localhost:5173`)
 
 ### Building for Production
 
@@ -179,14 +183,21 @@ The parser handles variable-length numbers and spaces:
 
 ## Data Structure
 
-All data is stored in browser LocalStorage with this schema:
+All data is stored in Supabase (PostgreSQL) with automatic syncing. The application includes:
+
+- **Cloud Storage**: Primary storage in Supabase with real-time sync
+- **LocalStorage Fallback**: Automatic fallback if Supabase is unavailable
+- **Migration Tool**: Automatic migration prompt for existing localStorage data
+
+See [SUPABASE_SETUP.md](./SUPABASE_SETUP.md) for setup instructions.
+
+### Database Schema
 
 ```javascript
 {
-  version: "1.0",
   sessions: [/* game sessions */],
   players: [/* player records */],
-  pendingStats: [/* awaiting approval */],
+  pending_stats: [/* awaiting approval */],
   guns: [/* QR code mappings */]
 }
 ```
