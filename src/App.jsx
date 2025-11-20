@@ -13,8 +13,17 @@ import { Home } from './pages/Home';
 import { PlayerUpload } from './pages/PlayerUpload';
 import { Dashboard } from './pages/Dashboard';
 import { Presentation } from './pages/Presentation';
+import MaintenanceScreen from './components/common/MaintenanceScreen';
 
 function App() {
+  // Check if maintenance mode is enabled
+  const isMaintenanceMode = import.meta.env.VITE_MAINTENANCE_MODE === 'true';
+
+  // Show maintenance screen if enabled
+  if (isMaintenanceMode) {
+    return <MaintenanceScreen />;
+  }
+
   return (
     <Router>
       <GameProvider>
