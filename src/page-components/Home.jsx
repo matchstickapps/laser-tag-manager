@@ -1,3 +1,5 @@
+'use client'
+
 /**
  * Home Page
  * Welcome screen with navigation to different interfaces

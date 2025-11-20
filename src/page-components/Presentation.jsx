@@ -1,3 +1,5 @@
+'use client'
+
 /**
  * Presentation Page
  * Full-screen display for TV/projector

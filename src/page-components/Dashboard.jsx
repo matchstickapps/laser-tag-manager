@@ -1,9 +1,11 @@
+'use client'
+
 /**
  * Manager Dashboard Page
  * Main interface for managing sessions, approving stats, and viewing players
  */
 
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { SessionControls } from '../components/dashboard/SessionControls';
 import { ApprovalQueue } from '../components/dashboard/ApprovalQueue';
@@ -11,6 +13,7 @@ import { ApprovalModal } from '../components/dashboard/ApprovalModal';
 import { PlayerTable } from '../components/dashboard/PlayerTable';
 import { Leaderboard } from '../components/dashboard/Leaderboard';
 import { usePending } from '../contexts/PendingContext';
+
 
 const Dashboard = () => {
   const router = useRouter();

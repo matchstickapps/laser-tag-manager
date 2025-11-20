@@ -1,3 +1,5 @@
+'use client'
+
 /**
  * Player Upload Page
  * Allows players to scan QR codes and upload gun display stats
@@ -33,6 +35,9 @@ const PlayerUpload = () => {
 
   // Initialize QR scanner
   useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+
     const init = async () => {
       // Show instructions on first visit
       const hasSeenInstructions = localStorage.getItem('seenCaptureInstructions');

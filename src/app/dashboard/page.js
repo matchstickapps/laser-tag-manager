@@ -1,6 +1,6 @@
 'use client'
 
-import Dashboard from '../../pages/Dashboard'
+import Dashboard from '../../page-components/Dashboard'
 
 export const dynamic = 'force-dynamic'
 

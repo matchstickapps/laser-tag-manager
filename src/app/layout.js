@@ -6,6 +6,8 @@ export const metadata = {
   description: 'Manage and track laser tag game statistics',
 }
 
+export const dynamic = 'force-dynamic'
+
 export default function RootLayout({ children }) {
   return (
     <html lang="en">

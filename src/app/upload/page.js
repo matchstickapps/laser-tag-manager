@@ -1,6 +1,6 @@
 'use client'
 
-import PlayerUpload from '../../pages/PlayerUpload'
+import PlayerUpload from '../../page-components/PlayerUpload'
 
 export const dynamic = 'force-dynamic'
 

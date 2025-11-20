@@ -1,6 +1,6 @@
 'use client'
 
-import Presentation from '../../pages/Presentation'
+import Presentation from '../../page-components/Presentation'
 
 export const dynamic = 'force-dynamic'
 
