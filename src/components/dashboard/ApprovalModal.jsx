@@ -10,7 +10,7 @@ import { ConfidenceBadge } from '../common/ConfidenceBadge';
 import { normalizeStats } from '../../utils/statsCalculator';
 
 export const ApprovalModal = ({ pending, onClose, onApproved }) => {
-  const { approvePending, rejectPending, updatePendingStats, deletePending } = usePending();
+  const { approveAndDelete, rejectAndDelete, updatePendingStats } = usePending();
   const { getPlayer, updatePlayerStats, updatePlayerName, updatePlayerTeam } = usePlayer();
 
   const player = getPlayer(pending.playerId);
@@ -33,24 +33,23 @@ export const ApprovalModal = ({ pending, onClose, onApproved }) => {
       updatePlayerTeam(pending.playerId, editedStats.team.value);
     }
 
-    // Mark as approved and delete
-    approvePending(pending.id);
-    deletePending(pending.id);
+    // Approve and delete in single atomic operation
+    approveAndDelete(pending.id);
 
     // Close modal and notify parent
     onClose();
     if (onApproved) {
       onApproved();
     }
-  }, [editedStats, playerName, player, pending, approvePending, deletePending, updatePlayerStats, updatePlayerName, updatePlayerTeam, onClose, onApproved]);
+  }, [editedStats, playerName, player, pending, approveAndDelete, updatePlayerStats, updatePlayerName, updatePlayerTeam, onClose, onApproved]);
 
   const handleReject = useCallback(() => {
     if (window.confirm('Are you sure you want to reject this submission?')) {
-      rejectPending(pending.id);
-      deletePending(pending.id);
+      // Reject and delete in single atomic operation
+      rejectAndDelete(pending.id);
       onClose();
     }
-  }, [pending, rejectPending, deletePending, onClose]);
+  }, [pending, rejectAndDelete, onClose]);
 
   // Keyboard shortcuts
   useEffect(() => {

@@ -102,6 +102,22 @@ export const PendingProvider = ({ children }) => {
     }));
   };
 
+  // Atomic operations - approve and delete in single update
+  const approveAndDelete = (pendingId) => {
+    updateData(prev => ({
+      ...prev,
+      pendingStats: prev.pendingStats.filter(p => p.id !== pendingId)
+    }));
+  };
+
+  // Atomic operations - reject and delete in single update
+  const rejectAndDelete = (pendingId) => {
+    updateData(prev => ({
+      ...prev,
+      pendingStats: prev.pendingStats.filter(p => p.id !== pendingId)
+    }));
+  };
+
   const value = {
     pendingStats: data.pendingStats,
     addPendingStats,
@@ -109,6 +125,8 @@ export const PendingProvider = ({ children }) => {
     rejectPending,
     updatePendingStats,
     deletePending,
+    approveAndDelete,
+    rejectAndDelete,
     getPendingStats,
     getPendingById,
     getPendingCount,
