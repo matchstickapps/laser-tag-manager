@@ -3,7 +3,7 @@
  * Detailed view for approving/rejecting stats
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { usePending } from '../../contexts/PendingContext';
 import { usePlayer } from '../../contexts/PlayerContext';
 import { ConfidenceBadge } from '../common/ConfidenceBadge';
@@ -18,25 +18,7 @@ export const ApprovalModal = ({ pending, onClose, onApproved }) => {
   const [playerName, setPlayerName] = useState(player?.name || '');
   const [isEditing, setIsEditing] = useState(false);
 
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyPress = (e) => {
-      if (e.key === 'a' || e.key === 'A') {
-        handleApprove();
-      } else if (e.key === 'r' || e.key === 'R') {
-        handleReject();
-      } else if (e.key === 'e' || e.key === 'E') {
-        setIsEditing(!isEditing);
-      } else if (e.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [isEditing, editedStats, playerName]);
-
-  const handleApprove = () => {
+  const handleApprove = useCallback(() => {
     // Update player stats
     const normalized = normalizeStats(editedStats);
     updatePlayerStats(pending.playerId, normalized);
@@ -55,16 +37,38 @@ export const ApprovalModal = ({ pending, onClose, onApproved }) => {
     approvePending(pending.id);
     deletePending(pending.id);
 
-    onApproved();
-  };
+    // Close modal and notify parent
+    onClose();
+    if (onApproved) {
+      onApproved();
+    }
+  }, [editedStats, playerName, player, pending, approvePending, deletePending, updatePlayerStats, updatePlayerName, updatePlayerTeam, onClose, onApproved]);
 
-  const handleReject = () => {
+  const handleReject = useCallback(() => {
     if (window.confirm('Are you sure you want to reject this submission?')) {
       rejectPending(pending.id);
       deletePending(pending.id);
       onClose();
     }
-  };
+  }, [pending, rejectPending, deletePending, onClose]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      if (e.key === 'a' || e.key === 'A') {
+        handleApprove();
+      } else if (e.key === 'r' || e.key === 'R') {
+        handleReject();
+      } else if (e.key === 'e' || e.key === 'E') {
+        setIsEditing(prev => !prev);
+      } else if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [handleApprove, handleReject, onClose]);
 
   const updateStat = (field, subfield, value) => {
     setEditedStats(prev => ({

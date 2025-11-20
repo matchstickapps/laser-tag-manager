@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { StatsCapture } from '../components/camera/StatsCapture';
 import { ImagePreview } from '../components/camera/ImagePreview';
 import { CaptureInstructions } from '../components/camera/CaptureInstructions';
@@ -16,8 +16,8 @@ import { compressImage } from '../utils/imageUtils';
 import { parseQRCode, isValidQRCode, findOrCreateGun } from '../utils/qrCodeHandler';
 import { Html5Qrcode } from 'html5-qrcode';
 
-export const PlayerUpload = () => {
-  const navigate = useNavigate();
+const PlayerUpload = () => {
+  const router = useRouter();
   const { isProcessing, progress, processCanvas, reset: resetOCR } = useOCR();
   const { getActiveSession } = useGame();
   const { createPlayer, getPlayerByGunId } = usePlayer();
@@ -264,7 +264,7 @@ export const PlayerUpload = () => {
         {/* Back to home */}
         <div className="text-center mt-4">
           <button
-            onClick={() => navigate('/')}
+            onClick={() => router.push('/')}
             className="text-gray-600 hover:text-gray-700 text-sm"
           >
             ← Back to Home
@@ -279,3 +279,5 @@ export const PlayerUpload = () => {
     </div>
   );
 };
+
+export default PlayerUpload;

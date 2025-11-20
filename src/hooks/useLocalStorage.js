@@ -1,10 +1,9 @@
 /**
  * useSupabaseStorage Hook
- * Syncs state with Supabase (with localStorage fallback)
+ * Syncs state with Supabase via Next.js API routes
  */
 
 import { useState, useEffect, useRef } from 'react';
-import { loadData, saveData } from '../utils/storageManager';
 
 const DEFAULT_DATA = {
   version: '1.0',
@@ -21,7 +20,7 @@ export const useLocalStorage = () => {
   const isInitialized = useRef(false);
   const saveTimeoutRef = useRef(null);
 
-  // Load data from Supabase on mount
+  // Load data from API on mount
   useEffect(() => {
     const initializeData = async () => {
       if (isInitialized.current) return;
@@ -29,7 +28,13 @@ export const useLocalStorage = () => {
 
       try {
         setIsLoading(true);
-        const loadedData = await loadData();
+        const response = await fetch('/api/data');
+
+        if (!response.ok) {
+          throw new Error('Failed to load data from server');
+        }
+
+        const loadedData = await response.json();
         setData(loadedData);
         setError(null);
       } catch (err) {
@@ -43,7 +48,7 @@ export const useLocalStorage = () => {
     initializeData();
   }, []);
 
-  // Save data to Supabase whenever it changes (with debounce)
+  // Save data to API whenever it changes (with debounce)
   useEffect(() => {
     if (!isInitialized.current || isLoading) return;
 
@@ -55,7 +60,17 @@ export const useLocalStorage = () => {
     // Debounce saves to avoid too many requests
     saveTimeoutRef.current = setTimeout(async () => {
       try {
-        await saveData(data);
+        const response = await fetch('/api/data/save', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to save data to server');
+        }
       } catch (err) {
         console.error('Failed to save data:', err);
         setError(err.message);

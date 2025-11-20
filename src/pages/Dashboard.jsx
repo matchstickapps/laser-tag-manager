@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/navigation';
 import { SessionControls } from '../components/dashboard/SessionControls';
 import { ApprovalQueue } from '../components/dashboard/ApprovalQueue';
 import { ApprovalModal } from '../components/dashboard/ApprovalModal';
@@ -12,8 +12,8 @@ import { PlayerTable } from '../components/dashboard/PlayerTable';
 import { Leaderboard } from '../components/dashboard/Leaderboard';
 import { usePending } from '../contexts/PendingContext';
 
-export const Dashboard = () => {
-  const navigate = useNavigate();
+const Dashboard = () => {
+  const router = useRouter();
   const { getPendingCount } = usePending();
 
   const [selectedPending, setSelectedPending] = useState(null);
@@ -54,13 +54,13 @@ export const Dashboard = () => {
 
           <div className="flex gap-3">
             <button
-              onClick={() => navigate('/presentation')}
+              onClick={() => router.push('/presentation')}
               className="btn-secondary"
             >
               Presentation View
             </button>
             <button
-              onClick={() => navigate('/')}
+              onClick={() => router.push('/')}
               className="btn-secondary"
             >
               Home
@@ -143,3 +143,5 @@ export const Dashboard = () => {
     </div>
   );
 };
+
+export default Dashboard;

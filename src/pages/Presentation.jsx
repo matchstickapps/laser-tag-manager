@@ -9,7 +9,7 @@ import { usePlayer } from '../contexts/PlayerContext';
 import { useGame } from '../contexts/GameContext';
 import { usePolling } from '../hooks/usePolling';
 
-export const Presentation = () => {
+const Presentation = () => {
   const { getAllPlayers, getPlayersBySession } = usePlayer();
   const { getActiveSession } = useGame();
 
@@ -34,3 +34,5 @@ export const Presentation = () => {
     />
   );
 };
+
+export default Presentation;

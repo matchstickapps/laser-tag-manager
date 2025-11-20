@@ -1,10 +1,10 @@
 /**
  * useOCR Hook
- * Manages OCR processing state using Google Cloud Vision API
+ * Manages OCR processing state using Next.js API route
  */
 
 import { useState } from 'react';
-import { processImageWithCloudVision, getApiKey } from '../utils/cloudVisionOCR';
+import { processCanvasWithOCR } from '../utils/ocrClient';
 import { parseStats, calculateOverallConfidence } from '../utils/statsParser';
 
 export const useOCR = () => {
@@ -20,15 +20,8 @@ export const useOCR = () => {
     setResult(null);
 
     try {
-      // Get API key
-      const apiKey = getApiKey();
-
-      if (!apiKey) {
-        throw new Error('Google Cloud Vision API key not configured. Please add it in settings.');
-      }
-
-      // Process image with Cloud Vision API
-      const ocrResult = await processImageWithCloudVision(canvas, apiKey, (p) => {
+      // Process image with OCR API
+      const ocrResult = await processCanvasWithOCR(canvas, (p) => {
         setProgress(p * 100);
       });
 
